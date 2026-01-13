@@ -17,7 +17,7 @@ public class Person {
   private int age; // age of the person
   private PImage image; // image of the person
   private PApplet app; //the canvas used to display graphical elements
-  private int radius;
+  private int width, height; // dimensions of the image
   
   public Person(PApplet p, int x, int y, String name, int age, String imagePath) {
     this.app = p;
@@ -26,7 +26,8 @@ public class Person {
     this.name = name;
     this.age = age;
     this.image = app.loadImage(imagePath);
-    this.radius = image.width/2; 
+    this.width = image.width;
+    this.height = image.height;
   }
   
   
@@ -47,10 +48,15 @@ public class Person {
 
 
   public boolean isCollidingWith(Person other) {
-    float d = PApplet.dist(x, y, other.x, other.y);
-    // return true if the distance between the two persons is 
-    // less than the sum of their radii
-    return d < radius + other.radius; 
+    // Check if the bounding boxes of the two persons intersect
+    boolean isLeftOfOtherRight = x < other.x + other.width;
+    boolean isRightOfOtherLeft = x + width > other.x;
+    boolean isAboveOtherBottom = y < other.y + other.height;
+    System.out.println(y);
+    boolean isBelowOtherTop = y + height > other.y;
+
+    return isLeftOfOtherRight && isRightOfOtherLeft 
+      && isAboveOtherBottom && isBelowOtherTop;
   }
   
 }

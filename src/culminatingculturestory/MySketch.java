@@ -14,46 +14,55 @@ import processing.core.PImage;
 public class MySketch extends PApplet {
     private PImage image; // image of the person
     private PImage imagetext;
+    private PImage invsbox;
     String userInput = "";
     int stage =0;
     private boolean showInfo = false; 
-    
-    
     private Person person; // declare a person object
-    private Person person2;
+    private Person invsbox2;
+    private Person cow;
     
     
     public void settings() {
-        size(800, 800);
+        size(1200, 800);
         
     }
     
     public void setup() {
         this.image = this.loadImage("images/scene.png");
-        this.imagetext = this.loadImage("images/textbox.png");
+        this.imagetext = this.loadImage("images/tbox.png");
+        this.invsbox = this.loadImage("images/nextscenebox.png");
         background(255); // set the background color to white
         // create a person object in the center of the screen
-        person = new Person(this, 200, 600, "Mr. Loo", 99, "images/herdboy.png"); 
-        person2 = new Person(this, 600, 600, "Mr. Loo", 99, "images/car.png"); 
+        person = new Person(this, 200, 600, "Mr. Loo", 99, "images/herdman.png"); 
+        invsbox2 = new Person(this, 1200, 0, "Scene", 99, "images/nextscenebox.png"); 
+        cow = new Person(this, 800, 600, "Buddy", 99, "images/cow.png"); 
     }
     
     public void draw() {
         background(255); // clear the screen
+        
+        println("Mouse X: " + mouseX + " | Mouse Y: " + mouseY); // Used to find cords (remove at end)
+        
         if(stage == 0){
             fill(0);
             textSize(30);
-            text("My Cool Super Nice Extra Amazing Game", 400, 100);
+            text("My Cool Super Nice Extra Amazing Game", 600, 100);
             fill(213);
-            rect(320, 300, 150, 50);
+            rect(520, 300, 150, 50);
             fill(0);
             textAlign(CENTER, CENTER);
-            text("Start Playing Here By Clicking This", 320 + 150/2, 300 + 50/2);
+            text("Start Playing Here By Clicking This", 520 + 150/2, 300 + 50/2);
         }else if (stage == 1){
             this.image(image, -100, 0);
-            this.image(imagetext, 200, 200);
+            this.image(imagetext, 150, 100);
+            invsbox2.draw();
             person.draw(); // draw the person on the screen
-            person2.draw();
+            cow.draw();
             drawCollisions();
+        }else if (stage == 2){
+            background(255);
+            person.draw();
         }
     }
     
@@ -71,7 +80,7 @@ public class MySketch extends PApplet {
     
     public void mousePressed() {
         if (stage == 0) {
-            int buttonX = 350;
+            int buttonX = 520;
             int buttonY = 300;
             int buttonW = 150;
             int buttonH = 50;
@@ -84,8 +93,8 @@ public class MySketch extends PApplet {
     }
 
     public void drawCollisions() {
-        if (person.isCollidingWith(person2)) {
-            stage = 0;
+        if (person.isCollidingWith(invsbox2)) {
+            stage = 2;
         }
     }
     
