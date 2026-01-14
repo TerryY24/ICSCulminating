@@ -38,12 +38,6 @@ public class Person {
   
   public void draw() {
     app.image(image, x, y); // draw the image at the person's position
-//    app.fill(123, 213, 300);
-//    app.rect(x, y, 100, -25);
-//    app.fill(0, 0, 0);
-//    app.ellipse(x, y, 25, 25);
-//    app.fill(0, 0, 0);
-//    app.ellipse(x + 100, y, 25, 25);
   }
 
 
@@ -52,7 +46,6 @@ public class Person {
     boolean isLeftOfOtherRight = x < other.x + other.width;
     boolean isRightOfOtherLeft = x + width > other.x;
     boolean isAboveOtherBottom = y < other.y + other.height;
-    System.out.println(y);
     boolean isBelowOtherTop = y + height > other.y;
 
     return isLeftOfOtherRight && isRightOfOtherLeft 

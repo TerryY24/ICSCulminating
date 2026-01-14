@@ -54,8 +54,11 @@ public class MySketch extends PApplet {
             textAlign(CENTER, CENTER);
             text("Start Playing Here By Clicking This", 520 + 150/2, 300 + 50/2);
         }else if (stage == 1){
+            textSize(20);
             this.image(image, -100, 0);
             this.image(imagetext, 150, 100);
+            textAlign(CENTER, CENTER);
+            text("Herd Boy was the child of the poor. He took the job of taking care of a farmer's cow. ", 400, 135);
             invsbox2.draw();
             person.draw(); // draw the person on the screen
             cow.draw();
@@ -90,6 +93,19 @@ public class MySketch extends PApplet {
                 stage = 1;
             }
         }
+        if (stage == 1) {
+            int buttonX = 150;
+            int buttonY = 100;
+            int buttonW = 900;
+            int buttonH = 150;
+            
+            if (mouseX >= buttonX && mouseX <= buttonX + buttonW &&
+                mouseY >= buttonY && mouseY <= buttonY + buttonH) {
+                
+                text("Start Playing Here By Clicking This", 520 + 150/2, 300 + 50/2);
+                
+            }
+        }   
     }
 
     public void drawCollisions() {
