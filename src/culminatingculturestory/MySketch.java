@@ -63,6 +63,7 @@ public class MySketch extends PApplet {
             person.draw(); // draw the person on the screen
             cow.draw();
             drawCollisions();
+            
         }else if (stage == 2){
             background(255);
             person.draw();
@@ -98,12 +99,20 @@ public class MySketch extends PApplet {
             int buttonY = 100;
             int buttonW = 900;
             int buttonH = 150;
+            int cowX = 800;
+            int cowY = 600;
+            int cowW = 250;
+            int cowH = 100;
             
             if (mouseX >= buttonX && mouseX <= buttonX + buttonW &&
                 mouseY >= buttonY && mouseY <= buttonY + buttonH) {
                 
                 text("Start Playing Here By Clicking This", 520 + 150/2, 300 + 50/2);
                 
+            }
+            if (mouseX >= cowX && mouseX <= cowX + cowW &&
+                mouseY >= cowY && mouseY <= cowY + cowH) {
+                text("Start Playing Here By Clicking This", 520 + 150/2, 300 + 50/2);
             }
         }   
     }
