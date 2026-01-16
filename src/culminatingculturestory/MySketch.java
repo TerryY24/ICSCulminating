@@ -27,7 +27,6 @@ public class MySketch extends PApplet {
     private PImage cowFlippedImg;
     private PImage cowSpeechImg;
     private PImage sky;
-    String userInput = "";
     int stage =0;
     private boolean cowFlipped = false;
     private boolean showCowSpeech = false;
@@ -35,6 +34,7 @@ public class MySketch extends PApplet {
     private Person person; // declare a person object
     private Person invsbox2;
     private Person cow;
+    private Person ridingCow;
     
     
     public void settings() {
@@ -47,11 +47,12 @@ public class MySketch extends PApplet {
         this.imagetext = this.loadImage("images/tbox.png");
         this.invsbox = this.loadImage("images/nextscenebox.png");
         this.cowFlippedImg = this.loadImage("images/cowFlip.png");
-        this.cowSpeechImg = this.loadImage("images/car.png");
+        this.cowSpeechImg = this.loadImage("images/cowSpeech1.png");
         this.sky = this.loadImage("images/scene2.png");
         background(255); // set the background color to white
         // create a person object in the center of the screen
         person = new Person(this, 200, 600, "Mr. Loo", 99, "images/herdman.png"); 
+        ridingCow = new Person(this, 200, 600, "BuddyCow", 99, "images/manRidingCow.png");
         invsbox2 = new Person(this, 1200, 0, "Scene", 99, "images/nextscenebox.png"); 
         cow = new Person(this, 800, 600, "Buddy", 99, "images/cow.png"); 
         
@@ -80,8 +81,6 @@ public class MySketch extends PApplet {
             textSize(20);
             this.image(image, -100, 0);
             this.image(imagetext, 150, 100);
-            textAlign(CENTER, CENTER);
-            text("Herd Boy was the child of the poor. He took the job of taking care of a farmer's cow. ", 400, 135);
             invsbox2.draw();
             person.draw(); // draw the person on the screen
             //cow.draw();
@@ -92,7 +91,7 @@ public class MySketch extends PApplet {
                 cow.draw();
             }
             if (showCowSpeech){
-                this.image(cowSpeechImg, 700, 500);
+                this.image(cowSpeechImg, 770, 440);
             }
             
             
@@ -103,7 +102,7 @@ public class MySketch extends PApplet {
             
             
             if (!gameOver && !gameWin) {
-                person.draw();
+                ridingCow.draw();
                 updateBalls();
                 checkWin();
             }
@@ -127,12 +126,16 @@ public class MySketch extends PApplet {
     public void keyPressed() {
         if (keyCode == LEFT) {
             person.move(-10, 0); // move the person to the left when the left arrow key is pressed
+            ridingCow.move(-10, 0);
         } else if (keyCode == RIGHT) {
             person.move(10, 0); // move the person to the right when the right arrow key is pressed
+            ridingCow.move(10, 0);
         } else if (keyCode == UP) {
             person.move(0, -10); // move the person up when the up arrow key is pressed
+            ridingCow.move(0, -10);
         } else if (keyCode == DOWN) {
             person.move(0, 10); // move the person down when the down arrow key is pressed
+            ridingCow.move(0, 10);
         }
     }
     
@@ -157,12 +160,21 @@ public class MySketch extends PApplet {
             int cowY = 600;
             int cowW = 250;
             int cowH = 100;
+            int speechBubblesX = 770;
+            int speechBubblesY = 440;
+            int speechBubblesW = 200;
+            int speechBubblesH = 100;
             
             if (mouseX >= buttonX && mouseX <= buttonX + buttonW &&
                 mouseY >= buttonY && mouseY <= buttonY + buttonH) {            
                 cowFlipped = true;
                 showCowSpeech = true;    
+                if (mouseX >= speechBubblesX && mouseX <= speechBubblesX + speechBubblesW &&
+                    mouseY >= speechBubblesY && mouseY <= speechBubblesY + speechBubblesH) {
+                    text("Start Playing Here By Clicking This", 520 + 150/2, 300 + 50/2);
+                }
             }
+            
             if (mouseX >= cowX && mouseX <= cowX + cowW &&
                 mouseY >= cowY && mouseY <= cowY + cowH) {
                 stage = 2;
@@ -210,6 +222,6 @@ public class MySketch extends PApplet {
         if (millis() - gameStartTime > winTime) {
             gameWin = true;
         }
-}
+    }
     
 }
