@@ -25,9 +25,14 @@ public class MySketch extends PApplet {
     private PImage imagetext;
     private PImage invsbox;
     private PImage cowFlippedImg;
+    private int cowDialogueStep = 0;
     private PImage cowSpeechImg;
+    private PImage cowSpeechImg2;
+    private PImage cowSpeechImg3;
     private PImage sky;
-    int stage =0;
+    private PImage forest;
+    private PImage restartButton;
+    int stage = 0;
     private boolean cowFlipped = false;
     private boolean showCowSpeech = false;
     private boolean showInfo = false; 
@@ -48,7 +53,11 @@ public class MySketch extends PApplet {
         this.invsbox = this.loadImage("images/nextscenebox.png");
         this.cowFlippedImg = this.loadImage("images/cowFlip.png");
         this.cowSpeechImg = this.loadImage("images/cowSpeech1.png");
+        this.cowSpeechImg2 = this.loadImage("images/cowSpeech2.png");
+        this.cowSpeechImg3 = this.loadImage("images/cowSpeech3.png");
         this.sky = this.loadImage("images/scene2.png");
+        this.forest = this.loadImage("images/scene3.png");
+        this.restartButton = this.loadImage("images/restart.png");
         background(255); // set the background color to white
         // create a person object in the center of the screen
         person = new Person(this, 200, 600, "Mr. Loo", 99, "images/herdman.png"); 
@@ -91,7 +100,13 @@ public class MySketch extends PApplet {
                 cow.draw();
             }
             if (showCowSpeech){
-                this.image(cowSpeechImg, 770, 440);
+                if (cowDialogueStep == 0){
+                    this.image(cowSpeechImg, 770, 440);
+                } else if (cowDialogueStep == 1){
+                    this.image(cowSpeechImg2, 770, 440);
+                } else if (cowDialogueStep == 2){
+                    this.image(cowSpeechImg3, 770, 440);
+                }
             }
             
             
@@ -108,19 +123,18 @@ public class MySketch extends PApplet {
             }
 
             if (gameOver) {
-                textAlign(CENTER, CENTER);
-                textSize(40);
-                fill(255, 0, 0);
-                text("GAME OVER", width / 2, height / 2);
+                this.image(restartButton, 500, 400);
             }
 
             if (gameWin) {
-                textAlign(CENTER, CENTER);
-                textSize(40);
-                fill(0, 200, 0);
-                text("YOU WIN!", width / 2, height / 2);
+                stage = 3;
             }
+        } else if(stage ==3){
+            background(255);
+            this.image(forest, 0, 0);
+            ridingCow.draw();
         }
+        
     }
     
     public void keyPressed() {
@@ -163,16 +177,17 @@ public class MySketch extends PApplet {
             int speechBubblesX = 770;
             int speechBubblesY = 440;
             int speechBubblesW = 200;
-            int speechBubblesH = 100;
+            int speechBubblesH = 200;
+            
             
             if (mouseX >= buttonX && mouseX <= buttonX + buttonW &&
                 mouseY >= buttonY && mouseY <= buttonY + buttonH) {            
                 cowFlipped = true;
                 showCowSpeech = true;    
-                if (mouseX >= speechBubblesX && mouseX <= speechBubblesX + speechBubblesW &&
-                    mouseY >= speechBubblesY && mouseY <= speechBubblesY + speechBubblesH) {
-                    text("Start Playing Here By Clicking This", 520 + 150/2, 300 + 50/2);
-                }
+            }
+            if (mouseX >= speechBubblesX && mouseX <= speechBubblesX + speechBubblesW &&
+                mouseY >= speechBubblesY && mouseY <= speechBubblesY + speechBubblesH) {
+                cowDialogueStep++;  
             }
             
             if (mouseX >= cowX && mouseX <= cowX + cowW &&
@@ -188,9 +203,36 @@ public class MySketch extends PApplet {
                 for (int i = 0; i < ballX.length; i++) {
                     ballX[i] = random(width);
                     ballY[i] = random(-800, 0);
+                    
+                    
                 }
             }
-        }   
+        }
+        
+        if (stage == 2 && gameOver) {
+            
+            int restartX = 500;
+            int restartY = 400;
+            int restartW = 200;
+            int restartH = 60;
+            
+            if (mouseX >= restartX && mouseX <= restartX + restartW &&
+                mouseY >= restartY && mouseY <= restartY + restartH) {
+
+                // Reset dodge game
+                gameOver = false;
+                gameWin = false;
+                gameStartTime = millis();
+                ridingCow.x = 200;
+                ridingCow.y = 600;
+
+                for (int i = 0; i < ballX.length; i++) {
+                    ballX[i] = random(width);
+                    ballY[i] = random(-800, 0);
+                    ballSpeed[i] = random(4, 8);
+                }
+            }
+        }
     }
 
     public void drawCollisions() {
@@ -212,7 +254,7 @@ public class MySketch extends PApplet {
             }
 
 
-            if (dist(ballX[i], ballY[i], person.getX(), person.getY()) < 40) {
+            if (dist(ballX[i], ballY[i], ridingCow.getX(), ridingCow.getY()) < 40) {
                 gameOver = true;
             }
         }
