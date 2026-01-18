@@ -25,7 +25,8 @@ public class MySketch extends PApplet {
     private PImage imagetext;
     private PImage invsbox;
     private PImage cowFlippedImg;
-    private int cowDialogueStep = 0;
+    private int cowDialogueStep = 0; // variable to create next speech bubbles
+    private int forestDialogueStep = -1;
     private PImage cowSpeechImg;
     private PImage cowSpeechImg2;
     private PImage cowSpeechImg3;
@@ -36,10 +37,12 @@ public class MySketch extends PApplet {
     private PImage textGameWin;
     private PImage forestClothesGone;
     private PImage cowSpeechImg4;
-    private PImage cowSpeechImg4;
-    private PImage cowSpeechImg4;
-    private PImage cowSpeechImg4;
-    private PImage cowSpeechImg4;
+    private PImage girlSpeechImg1;
+    private PImage boySpeechImg1;
+    private PImage girlSpeechImg2;
+    private PImage cowSpeechImg5;
+    private PImage cowSpeechImg6;
+    private PImage treeSpeechImg1;
     int stage = 0; // Variable for me scenes
     private boolean cowFlipped = false; // Boolean variable to allow me to flip cow
     private boolean showCowSpeech = false; // Boolean variable to show cow speaking
@@ -75,6 +78,12 @@ public class MySketch extends PApplet {
         this.textGameWin = this.loadImage("images/textForest.png");
         this.forestClothesGone = this.loadImage("images/forestNoClothes.png");
         this.cowSpeechImg4 = this.loadImage("images/cowSpeech4.png");
+        this.girlSpeechImg1 = this.loadImage("images/womenSpeech1.png");
+        this.boySpeechImg1 = this.loadImage("images/manSpeech1.png");
+        this.girlSpeechImg2 = this.loadImage("images/womenSpeech2.png");
+        this.cowSpeechImg5 = this.loadImage("images/cowSpeech5.png");
+        this.cowSpeechImg6 = this.loadImage("images/cowSpeech6.png");
+        this.treeSpeechImg1 = this.loadImage("images/treeSpeech1.png");
         background(255); // set the background color to white
         // creating person objects for dectections and other important things
         person = new Person(this, 200, 600, "Mr. Loo", 99, "images/herdman.png"); 
@@ -150,18 +159,38 @@ public class MySketch extends PApplet {
 
             if (gameWin) {
                 stage = 3;
+                
             }
         } else if(stage == 3){
+            ridingCowTwo.x = 100;
+            ridingCowTwo.y = 600;
             background(255);
             this.image(forest, 0, 0);
             ridingCowTwo.draw();
             this.image(textGameWin, 150, 100);   
             this.image(cowSpeechImg4, 120, 450);
         } else if(stage == 4){
+            ridingCowTwo.x = 100;
+            ridingCowTwo.y = 600;
             background(255);
             this.image(forestClothesGone, 0, 0);
             ridingCowTwo.draw();
-            
+            if (forestDialogueStep == 0){
+                image(girlSpeechImg1, 420, 350);
+            } else if (forestDialogueStep == 1){
+                image(boySpeechImg1, 110, 445);
+            } else if (forestDialogueStep == 2){
+                image(girlSpeechImg2, 420, 350);
+            } else if (forestDialogueStep == 3){
+                image(cowSpeechImg5, 120, 450);
+            } else if (forestDialogueStep == 4){
+                image(cowSpeechImg6, 120, 450);
+            } else if (forestDialogueStep == 5){
+                image(treeSpeechImg1, 900, 100);
+            } else if (forestDialogueStep == 6){
+                stage = 5;
+            }
+
         }
         
     }
@@ -289,6 +318,18 @@ public class MySketch extends PApplet {
             if (mouseX >= clothesX && mouseX <= clothesX + clothesW &&
                 mouseY >= clothesY && mouseY <= clothesY + clothesH) {
                 stage = 4;
+            }
+        }
+        if (stage == 4) {
+            int bubbleX = 0;
+            int bubbleY = 0;
+            int bubbleW = 1200;
+            int bubbleH = 800;
+
+            if (mouseX >= bubbleX && mouseX <= bubbleX + bubbleW &&
+                mouseY >= bubbleY && mouseY <= bubbleY + bubbleH) {
+
+                forestDialogueStep++;
             }
         }
     }
