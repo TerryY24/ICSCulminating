@@ -18,10 +18,10 @@ public class MySketch extends PApplet {
     boolean gameOver = false;
     boolean gameWin = false;
     int gameStartTime;
-    int winTime = 30000; 
+    int winTime = 1000; 
     
-    
-    private PImage image; // image of the person
+    // Declaring variables for me to use in code
+    private PImage image; // PImages will allow me to use images without creating an object
     private PImage imagetext;
     private PImage invsbox;
     private PImage cowFlippedImg;
@@ -32,22 +32,35 @@ public class MySketch extends PApplet {
     private PImage sky;
     private PImage forest;
     private PImage restartButton;
-    int stage = 0;
-    private boolean cowFlipped = false;
-    private boolean showCowSpeech = false;
+    private PImage textboxGame;
+    private PImage textGameWin;
+    private PImage forestClothesGone;
+    private PImage cowSpeechImg4;
+    private PImage cowSpeechImg4;
+    private PImage cowSpeechImg4;
+    private PImage cowSpeechImg4;
+    private PImage cowSpeechImg4;
+    int stage = 0; // Variable for me scenes
+    private boolean cowFlipped = false; // Boolean variable to allow me to flip cow
+    private boolean showCowSpeech = false; // Boolean variable to show cow speaking
     private boolean showInfo = false; 
+    private boolean showTextGame = false;
+    private boolean gameStarted = false;
     private Person person; // declare a person object
     private Person invsbox2;
     private Person cow;
     private Person ridingCow;
+    private Person ridingCowTwo;
     
     
     public void settings() {
+        // Creates the windows size
         size(1200, 800);
         
     }
     
     public void setup() {
+        // Loads the images into variable for me to use
         this.image = this.loadImage("images/scene.png");
         this.imagetext = this.loadImage("images/tbox.png");
         this.invsbox = this.loadImage("images/nextscenebox.png");
@@ -58,13 +71,19 @@ public class MySketch extends PApplet {
         this.sky = this.loadImage("images/scene2.png");
         this.forest = this.loadImage("images/scene3.png");
         this.restartButton = this.loadImage("images/restart.png");
+        this.textboxGame = this.loadImage("images/tboxgame.png");
+        this.textGameWin = this.loadImage("images/textForest.png");
+        this.forestClothesGone = this.loadImage("images/forestNoClothes.png");
+        this.cowSpeechImg4 = this.loadImage("images/cowSpeech4.png");
         background(255); // set the background color to white
-        // create a person object in the center of the screen
+        // creating person objects for dectections and other important things
         person = new Person(this, 200, 600, "Mr. Loo", 99, "images/herdman.png"); 
-        ridingCow = new Person(this, 200, 600, "BuddyCow", 99, "images/manRidingCow.png");
+        ridingCow = new Person(this, 300, 500, "BuddyCow", 99, "images/manRidingCow.png");
+        ridingCowTwo = new Person(this, 100, 600, "BuddyCow", 99, "images/ridingcownormal.png");
         invsbox2 = new Person(this, 1200, 0, "Scene", 99, "images/nextscenebox.png"); 
         cow = new Person(this, 800, 600, "Buddy", 99, "images/cow.png"); 
         
+        // Used for game
         for (int i = 0; i < ballX.length; i++) {
             ballX[i] = random(width);
             ballY[i] = random(-800, 0);
@@ -113,10 +132,13 @@ public class MySketch extends PApplet {
         }else if (stage == 2){
             background(255);
             this.image(sky, 0, 0);
-
             
             
-            if (!gameOver && !gameWin) {
+            if (stage == 2 && !gameStarted) {
+                this.image(textboxGame, 150, 100);        
+            }
+            
+            if(!gameOver && gameStarted){
                 ridingCow.draw();
                 updateBalls();
                 checkWin();
@@ -129,10 +151,17 @@ public class MySketch extends PApplet {
             if (gameWin) {
                 stage = 3;
             }
-        } else if(stage ==3){
+        } else if(stage == 3){
             background(255);
             this.image(forest, 0, 0);
-            ridingCow.draw();
+            ridingCowTwo.draw();
+            this.image(textGameWin, 150, 100);   
+            this.image(cowSpeechImg4, 120, 450);
+        } else if(stage == 4){
+            background(255);
+            this.image(forestClothesGone, 0, 0);
+            ridingCowTwo.draw();
+            
         }
         
     }
@@ -141,15 +170,19 @@ public class MySketch extends PApplet {
         if (keyCode == LEFT) {
             person.move(-10, 0); // move the person to the left when the left arrow key is pressed
             ridingCow.move(-10, 0);
+            ridingCowTwo.move(-10, 0);
         } else if (keyCode == RIGHT) {
             person.move(10, 0); // move the person to the right when the right arrow key is pressed
             ridingCow.move(10, 0);
+            ridingCowTwo.move(10, 0);
         } else if (keyCode == UP) {
             person.move(0, -10); // move the person up when the up arrow key is pressed
             ridingCow.move(0, -10);
+            ridingCowTwo.move(0, -10);
         } else if (keyCode == DOWN) {
             person.move(0, 10); // move the person down when the down arrow key is pressed
             ridingCow.move(0, 10);
+            ridingCowTwo.move(0, 10);
         }
     }
     
@@ -193,9 +226,22 @@ public class MySketch extends PApplet {
             if (mouseX >= cowX && mouseX <= cowX + cowW &&
                 mouseY >= cowY && mouseY <= cowY + cowH) {
                 stage = 2;
+                   
+                gameStarted = false;
                 
+            }
+        }
+        
+        if (stage == 2 && !gameStarted){
+            int textGameX = 150;
+            int textGameY = 100;
+            int textGameW = 900;
+            int textGameH = 150;
+            
+            if (mouseX >= textGameX && mouseX <= textGameX + textGameW &&
+                mouseY >= textGameY && mouseY <= textGameY + textGameH) {
                 
-                
+                gameStarted = true;
                 gameOver = false;
                 gameWin = false;
                 gameStartTime = millis();
@@ -220,6 +266,7 @@ public class MySketch extends PApplet {
                 mouseY >= restartY && mouseY <= restartY + restartH) {
 
                 // Reset dodge game
+                gameStarted = false;
                 gameOver = false;
                 gameWin = false;
                 gameStartTime = millis();
@@ -231,6 +278,17 @@ public class MySketch extends PApplet {
                     ballY[i] = random(-800, 0);
                     ballSpeed[i] = random(4, 8);
                 }
+            }
+        }
+        if (stage == 3){
+            int clothesX = 510;
+            int clothesY = 660;
+            int clothesW = 160;
+            int clothesH = 100;
+            
+            if (mouseX >= clothesX && mouseX <= clothesX + clothesW &&
+                mouseY >= clothesY && mouseY <= clothesY + clothesH) {
+                stage = 4;
             }
         }
     }
