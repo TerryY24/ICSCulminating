@@ -18,7 +18,7 @@ public class MySketch extends PApplet {
     boolean gameOver = false;
     boolean gameWin = false;
     int gameStartTime;
-    int winTime = 1000; 
+    int winTime = 10000; 
     
     // Declaring variables for me to use in code
     private PImage image; // PImages will allow me to use images without creating an object
@@ -27,6 +27,7 @@ public class MySketch extends PApplet {
     private PImage cowFlippedImg;
     private int cowDialogueStep = 0; // variable to create next speech bubbles
     private int forestDialogueStep = -1;
+    private int scene6DialogueStep = 0;
     private PImage cowSpeechImg;
     private PImage cowSpeechImg2;
     private PImage cowSpeechImg3;
@@ -43,12 +44,20 @@ public class MySketch extends PApplet {
     private PImage cowSpeechImg5;
     private PImage cowSpeechImg6;
     private PImage treeSpeechImg1;
+    private PImage scene5;
+    private PImage textScene5;
+    private PImage girlSpeechImg3;
+    private PImage scene6;
+    private PImage textScene6One;
+    private PImage textScene6Two;
+    private PImage end;
     int stage = 0; // Variable for me scenes
     private boolean cowFlipped = false; // Boolean variable to allow me to flip cow
     private boolean showCowSpeech = false; // Boolean variable to show cow speaking
     private boolean showInfo = false; 
     private boolean showTextGame = false;
     private boolean gameStarted = false;
+    private boolean showGirlSpeech = false;
     private Person person; // declare a person object
     private Person invsbox2;
     private Person cow;
@@ -84,6 +93,13 @@ public class MySketch extends PApplet {
         this.cowSpeechImg5 = this.loadImage("images/cowSpeech5.png");
         this.cowSpeechImg6 = this.loadImage("images/cowSpeech6.png");
         this.treeSpeechImg1 = this.loadImage("images/treeSpeech1.png");
+        this.scene5 = this.loadImage("images/scene5.png");
+        this.textScene5 = this.loadImage("images/tbwomenandboy.png");
+        this.girlSpeechImg3 = this.loadImage("images/womanSpeech3.png");
+        this.scene6 = this.loadImage("images/scene6.png");
+        this.textScene6One = this.loadImage("images/tboxleaving.png");
+        this.textScene6Two = this.loadImage("images/tboxleaving2.png");
+        this.end = this.loadImage("images/ending.png");
         background(255); // set the background color to white
         // creating person objects for dectections and other important things
         person = new Person(this, 200, 600, "Mr. Loo", 99, "images/herdman.png"); 
@@ -91,7 +107,6 @@ public class MySketch extends PApplet {
         ridingCowTwo = new Person(this, 100, 600, "BuddyCow", 99, "images/ridingcownormal.png");
         invsbox2 = new Person(this, 1200, 0, "Scene", 99, "images/nextscenebox.png"); 
         cow = new Person(this, 800, 600, "Buddy", 99, "images/cow.png"); 
-        
         // Used for game
         for (int i = 0; i < ballX.length; i++) {
             ballX[i] = random(width);
@@ -103,17 +118,15 @@ public class MySketch extends PApplet {
     public void draw() {
         background(255); // clear the screen
         
-        println("Mouse X: " + mouseX + " | Mouse Y: " + mouseY); // Used to find cords (remove at end)
-        
         if(stage == 0){
             fill(0);
             textSize(30);
-            text("My Cool Super Nice Extra Amazing Game", 600, 100);
+            text("The Herd Boy and the Weaving Madien", 600, 100);
             fill(213);
             rect(520, 300, 150, 50);
             fill(0);
             textAlign(CENTER, CENTER);
-            text("Start Playing Here By Clicking This", 520 + 150/2, 300 + 50/2);
+            text("Start", 520 + 150/2, 300 + 50/2);
         }else if (stage == 1){
             textSize(20);
             this.image(image, -100, 0);
@@ -168,7 +181,7 @@ public class MySketch extends PApplet {
             this.image(forest, 0, 0);
             ridingCowTwo.draw();
             this.image(textGameWin, 150, 100);   
-            this.image(cowSpeechImg4, 120, 450);
+            this.image(cowSpeechImg4, 150, 480);
         } else if(stage == 4){
             ridingCowTwo.x = 100;
             ridingCowTwo.y = 600;
@@ -176,21 +189,37 @@ public class MySketch extends PApplet {
             this.image(forestClothesGone, 0, 0);
             ridingCowTwo.draw();
             if (forestDialogueStep == 0){
-                image(girlSpeechImg1, 420, 350);
+                image(girlSpeechImg1, 410, 350);
             } else if (forestDialogueStep == 1){
                 image(boySpeechImg1, 110, 445);
             } else if (forestDialogueStep == 2){
-                image(girlSpeechImg2, 420, 350);
+                image(girlSpeechImg2, 410, 350);
             } else if (forestDialogueStep == 3){
-                image(cowSpeechImg5, 120, 450);
+                image(cowSpeechImg5, 150, 480);
             } else if (forestDialogueStep == 4){
-                image(cowSpeechImg6, 120, 450);
+                image(cowSpeechImg6, 150, 480);
             } else if (forestDialogueStep == 5){
                 image(treeSpeechImg1, 900, 100);
             } else if (forestDialogueStep == 6){
                 stage = 5;
             }
 
+        } else if(stage == 5){
+            ridingCowTwo.draw();
+            this.image(scene5, 0, 0);
+            this.image(textScene5, 150, 100);
+            if(showGirlSpeech){
+                this.image(girlSpeechImg3, 200, 340);
+            }
+        } else if(stage == 6){
+            this.image(scene6, 0, 0);
+            if (scene6DialogueStep == 0){
+                this.image(textScene6One, 150, 100);
+            } else if (scene6DialogueStep == 1){
+                this.image(textScene6Two, 150, 100);
+            } else if (scene6DialogueStep == 2){
+                this.image(end, 0, 0);
+            }
         }
         
     }
@@ -330,6 +359,36 @@ public class MySketch extends PApplet {
                 mouseY >= bubbleY && mouseY <= bubbleY + bubbleH) {
 
                 forestDialogueStep++;
+            }
+        }
+        if (stage == 5){
+            int boxX = 150;
+            int boxY = 100;
+            int boxW = 900;
+            int boxH = 150;
+            int bubbleX = 200;
+            int bubbleY = 340;
+            int bubbleW = 150;
+            int bubbleH = 150;
+
+            if (mouseX >= boxX && mouseX <= boxX + boxW &&
+                mouseY >= boxY && mouseY <= boxY + boxH) {
+                showGirlSpeech = true;
+            }
+            if (mouseX >= bubbleX && mouseX <= bubbleX + bubbleW &&
+                mouseY >= bubbleY && mouseY <= bubbleY + bubbleH) {
+                stage = 6;
+            }
+        }
+        if (stage == 6){
+            int boxX = 150;
+            int boxY = 100;
+            int boxW = 900;
+            int boxH = 150;
+            
+            if (mouseX >= boxX && mouseX <= boxX + boxW &&
+                mouseY >= boxY && mouseY <= boxY + boxH) {
+                scene6DialogueStep++;
             }
         }
     }
